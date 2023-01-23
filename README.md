@@ -28,6 +28,10 @@ L'appli FIMOBILE est constitués de:
 Les tables suivantes existes dans deux schémas, un pour la saison en cours et un pour la saison sur laquelle les admins travaillent
 ![image](https://user-images.githubusercontent.com/114645588/214133827-e5b1cedf-145f-4065-956a-342141e49f8e.png)
 
+Ces tables font partie d'un schéma et constituent les archivent des années précédentes ainsi que la source des statistiques
+![image](https://user-images.githubusercontent.com/114645588/214135061-2fe19de5-c29f-4610-9ef0-4be13a794990.png)
+
+
 Ces tables sont situées dans un schéma est servent à l'authentification des utilisateurs
 ![image](https://user-images.githubusercontent.com/114645588/214134426-9c32b0ca-cb63-4c60-92c3-33c141f9cef8.png)
 
