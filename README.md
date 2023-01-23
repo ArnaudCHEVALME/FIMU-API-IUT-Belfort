@@ -24,7 +24,7 @@ L'appli FIMOBILE est constitués de:
 * Rubrique à l'accueil
 * Sauvegarde de ses artistes favoris
 
-Nos maquettes :
+## Nos maquettes :
 
 [MOBILE](https://design.penpot.app/#/view/59473b70-4589-11ed-ab33-17d63e1758b0?page-id=9909b620-4589-11ed-a957-2fef84979036&section=interactions&index=7&share-id=bffddf80-4954-11ed-a794-c67f7655c7b3)
 
