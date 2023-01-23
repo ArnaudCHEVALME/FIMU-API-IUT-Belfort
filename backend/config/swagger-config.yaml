@@ -1,0 +1,670 @@
+openapi: 3.0.0
+info:
+  title: FIMU API
+  version: 4.2.0
+  description: |
+    ### API du projet FIMU groupe 1.
+    
+    Voici une portion des routes de l'API.
+    
+    Pour pouvoir tester toutes ces routes, il faut être connecté en tant qu'administrateur.
+    
+    Pour se connecter, il faut créer un compte en tant qu'administrateur, puis se connecter avec ce compte.
+    
+    Pour créer un compte passer par la route **POST** /auth/signup.
+    
+    Pour se connecter passer par la route **POST** /auth/signin.
+    
+    L'API vous renvoie un token d'authentification, il faut le copier et le coller dans le champ "Authorization" de la section "Authorize" en haut à droite de la page.
+    
+    Pour ce qui est des champs de saisie de type "pipeDelimitedArray" (*dans artiste*), il faut séparer les valeurs par des pipes "|".
+servers:
+  - url: http://localhost:8080
+    description: Local server
+tags:
+  - name: Auth
+    description: Authentification
+  - name: Artistes
+    description: Artiste
+  - name: Pays
+    description: Pays
+  - name: Genres
+    description: Genre
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      scheme: bearer
+      bearerFormat: JWT
+      name: x-access-token
+      in: header
+
+paths:
+
+  ################# GENRES #################
+  /genres:
+
+    # CREATE A NEW GENRE #
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Genres
+      summary: Créer un nouveau genre
+      operationId: createGenre
+      responses:
+        '201':
+          description: Genre correctement créé
+        '400':
+          description: Genre non créé
+        '401':
+          description: Non autorisé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
+                  example: "Rap"
+
+    # GET ALL GENRES #
+    get:
+      tags:
+        - Genres
+      summary: Renvoie tous les genres
+      operationId: findAllGenres
+      responses:
+        '200':
+          description: Renvoie tous les genres
+        '500':
+          description: Erreur serveur
+
+  /genres/{id}:
+
+    # GET A GENRE BY ID #
+    get:
+      tags:
+        - Genres
+      summary: Renvoie un genre par son id
+      operationId: findByPkGenre
+      responses:
+        '200':
+          description: Renvoie le genre
+        '404':
+          description: Genre non trouvé
+        '500':
+          description: Erreur serveur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+    # UPDATE A GENRE BY ID #
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Genres
+      summary: Met à jour un genre par son id
+      operationId: updateGenre
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Genre mis à jour
+        '400':
+          description: Genre non mis à jour
+        '401':
+          description: Non autorisé
+        '404':
+          description: Genre non trouvé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
+                  example: "Métal"
+
+    # DELETE A GENRE BY ID #
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Genres
+      summary: Supprime un genre par son id
+      operationId: deleteGenre
+      responses:
+        '200':
+          description: Genre supprimé
+        '401':
+          description: Non autorisé
+        '404':
+          description: Genre non trouvé
+        '500':
+          description: Erreur serveur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+  ################# SOUS GENRES #################
+  /sousGenre:
+
+    # CREATE A NEW SOUS GENRE #
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - SousGenres
+      summary: Créer un nouveau sous genre
+      operationId: createSousGenre
+      responses:
+        '201':
+          description: Sous genre correctement créé
+        '400':
+          description: Sous genre non créé
+        '401':
+          description: Non autorisé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
+                  example: "Hip-Hop"
+
+    # GET ALL SOUS GENRES BY SEASON #
+    get:
+      tags:
+        - SousGenres
+      summary: Renvoie tous les sous genres
+      responses:
+        '200':
+          description: Renvoie tous les sous genres
+        '500':
+          description: Erreur serveur
+      operationId: findAllSousGenres
+
+  /sousGenre/{id}:
+
+    # GET A SOUS GENRE BY ID #
+    get:
+      tags:
+        - SousGenres
+      summary: Renvoie un sous genre par son id
+      operationId: findByPkSousGenre
+      responses:
+        '200':
+          description: Renvoie le sous genre
+        '404':
+          description: Sous genre non trouvé
+        '500':
+          description: Erreur serveur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+    # UPDATE A SOUS GENRE BY ID #
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - SousGenres
+      summary: Met à jour un sous genre par son id
+      operationId: updateSousGenre
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sous genre mis à jour
+        '400':
+          description: Sous genre non mis à jour
+        '401':
+          description: Non autorisé
+        '404':
+          description: Sous genre non trouvé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
+                  example: "Métal"
+
+    # DELETE A SOUS GENRE BY ID
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - SousGenres
+      summary: Supprime un sous genre par son id
+      operationId: deleteSousGenre
+      responses:
+        '200':
+          description: Sous genre supprimé
+        '401':
+          description: Non autorisé
+        '404':
+          description: Sous genre non trouvé
+        '500':
+          description: Erreur serveur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+
+  ################# PAYS #################
+  /pays:
+
+    # CREATE A NEW PAYS
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Pays
+      summary: Créer un nouveau pays
+      operationId: createPays
+      responses:
+        '201':
+          description: Pays correctement créé
+        '400':
+          description: Pays non créé
+        '401':
+          description: Non autorisé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                nompays:
+                  type: string
+                  example: "France"
+
+    # GET ALL PAYS
+    get:
+      tags:
+        - Pays
+      summary: Renvoie tous les pays
+      responses:
+        '200':
+          description: Renvoie tous les pays
+        '500':
+          description: Erreur serveur
+      operationId: findAllPays
+
+  /pays/{id}:
+
+    # GET A PAYS BY ID
+    get:
+      tags:
+        - Pays
+      summary: Renvoie un pays par son id
+      operationId: findByPkPays
+      responses:
+        '200':
+          description: Renvoie le pays
+        '404':
+          description: Pays non trouvé
+        '500':
+          description: Erreur serveur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+    # UPDATE A PAYS BY ID
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Pays
+      summary: Met à jour un pays par son id
+      operationId: updatePays
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Pays mis à jour
+        '400':
+          description: Pays non mis à jour
+        '401':
+          description: Non autorisé
+        '404':
+          description: Pays non trouvé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                nompays:
+                  type: string
+                  example: "Vatican"
+
+    # DELETE A PAYS BY ID
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Pays
+      summary: Supprime un pays par son id
+      operationId: deletePays
+      responses:
+        '200':
+          description: Pays supprimé
+        '401':
+          description: Non autorisé
+        '404':
+          description: Pays non trouvé
+        '500':
+          description: Erreur serveur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+
+
+  ################# ARTISTES #################
+
+  /artistes:
+
+    # CREATE A NEW ARTISTE
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Artistes
+      summary: Créer un nouvel artiste
+      operationId: createArtiste
+      responses:
+        '201':
+          description: Artiste correctement créé
+        '400':
+          description: Artiste non créé
+        '401':
+          description: Non autorisé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nom de l'artiste
+                bio:
+                  type: string
+                  description: Biographie de l'artiste
+                linkClip:
+                  type: string
+                  description: Lien vers le clip de l'artiste
+                liensReseaux:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      liens:
+                        type: string
+                        description: Lien du réseau social de l'artiste
+                      categorieReseauId:
+                        type: integer
+                        description: Id de la catégorie du réseau social de l'artiste
+                genres:
+                  type: pipeDelimitedArray
+                  items:
+                    type: number
+                    description: Id du genre de l'artiste
+                sousGenres:
+                  type: pipeDelimitedArray
+                  items:
+                    type: number
+                    description: Id du sous genre de l'artiste
+                pays:
+                  type: pipeDelimitedArray
+                  items:
+                    type: number
+                    description: Id du pays de l'artiste
+
+    # GET ALL ARTISTES
+    get:
+      tags:
+        - Artistes
+      summary: Renvoie tous les artistes
+      responses:
+        '200':
+          description: Renvoie tous les artistes
+        '500':
+          description: Erreur serveur
+      operationId: findAllArtistes
+
+  /artistes/{id}:
+    # GET ARTISTE BY ID
+    get:
+      tags:
+        - Artistes
+      summary: Renvoie un artiste par son id
+      responses:
+        '200':
+          description: Renvoie l'artiste
+        '404':
+          description: Artiste non trouvé
+        '500':
+          description: Erreur serveur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+    # UPDATE ARTISTE BY ID
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Artistes
+      summary: Met à jour un artiste par son id
+      operationId: updateArtiste
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Artiste mis à jour
+        '400':
+          description: Artiste non mis à jour
+        '401':
+          description: Non autorisé
+        '404':
+          description: Artiste non trouvé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nom de l'artiste
+                bio:
+                  type: string
+                  description: Biographie de l'artiste
+                linkClip:
+                  type: string
+                  description: Lien vers le clip de l'artiste
+                liensReseaux:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      liens:
+                        type: string
+                        description: Liens des réseaux sociaux de l'artiste
+                      categorieReseauId:
+                        type: integer
+                        description: Id de la catégorie du réseau social de l'artiste
+                genres:
+                  type: pipeDelimitedArray
+                  items:
+                    type: number
+                    description: Ids des genres de l'artiste
+                sousGenres:
+                  type: pipeDelimitedArray
+                  items:
+                    type: number
+                    description: Ids des sous genres de l'artiste
+                pays:
+                  type: pipeDelimitedArray
+                  items:
+                    type: number
+                    description: Ids des pays de l'artiste
+
+    # DELETE ARTISTE BY ID
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Artistes
+      summary: Supprime un artiste par son id
+      description: Supprime un artiste par son id
+      operationId: deleteArtiste
+      responses:
+        '200':
+          description: Artiste supprimé
+        '401':
+          description: Non autorisé
+        '404':
+          description: Artiste non trouvé
+        '500':
+          description: Erreur serveur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+  ################# TOKEN #################
+
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Créer un nouvel utilisateur
+      description: Créer un nouvel utilisateur
+      responses:
+        '201':
+          description: Utilisateur correctement créé
+        '400':
+          description: Utilisateur non créé
+        '500':
+          description: Erreur serveur
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  description: Login de l'utilisateur
+                email:
+                  type: string
+                  description: Email de l'utilisateur
+                password:
+                  type: string
+                  description: Mot de passe de l'utilisateur
+                roleId:
+                  type: integer
+                  description: 1 Stagiaire / 2 Admins / 3 Modérateurs
+
+  /auth/signin:
+    post:
+      tags:
+        - Auth
+      summary: Se connecter
+      description: Se connecter
+      responses:
+        '200':
+          description: Utilisateur connecté
+        '400':
+          description: Utilisateur non connecté
+        '500':
+          description: Erreur serveur
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  description: Login de l'utilisateur
+                password:
+                  type: string
+                  description: Mot de passe de l'utilisateur
+
+
